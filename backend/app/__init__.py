@@ -1,9 +1,11 @@
 from datetime import datetime
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from flask_swagger_ui import get_swaggerui_blueprint
 from dotenv import load_dotenv
 import os
+from pathlib import Path
 
 from app.shared.database import init_db
 from app.modules.users.routes import users_bp
@@ -39,7 +41,25 @@ def create_app():
             "timestamp": datetime.utcnow().isoformat(),
         }
 
+    # Swagger configuration
+    SWAGGER_URL = '/api/docs'
+    API_URL = '/swagger.json'
+    swagger_bp = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': "Feature Voting System API"
+        }
+    )
+
+    # Serve swagger.json
+    @app.route('/swagger.json')
+    def swagger():
+        base_path = Path(__file__).parent.parent
+        return send_from_directory(base_path, 'swagger.json')
+
     # Register blueprints
+    app.register_blueprint(swagger_bp, url_prefix=SWAGGER_URL)
     app.register_blueprint(users_bp, url_prefix="/api/users")
     app.register_blueprint(features_bp, url_prefix="/api/features")
     app.register_blueprint(votes_bp, url_prefix="/api/votes")

@@ -1,0 +1,481 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Feature Voting System API",
+    "description": "API for managing feature requests and votes in a feature voting system",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "UserBase": {
+        "type": "object",
+        "required": [
+          "email",
+          "name"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's full name"
+          }
+        }
+      },
+      "UserCreate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "password"
+            ],
+            "properties": {
+              "password": {
+                "type": "string",
+                "format": "password",
+                "description": "User's password"
+              }
+            }
+          }
+        ]
+      },
+      "UserResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "created_at"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "User's unique identifier"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp when the user was created"
+              }
+            }
+          }
+        ]
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "User's password"
+          }
+        }
+      },
+      "FeatureBase": {
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "category"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Feature request title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the feature request"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Bug",
+              "Feature",
+              "Enhancement"
+            ],
+            "description": "Category of the feature request"
+          }
+        }
+      },
+      "FeatureResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FeatureBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "status",
+              "created_at",
+              "user_id",
+              "vote_count"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "Feature's unique identifier"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "Open",
+                  "Closed"
+                ],
+                "description": "Current status of the feature request"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp when the feature was created"
+              },
+              "user_id": {
+                "type": "integer",
+                "description": "ID of the user who created the feature request"
+              },
+              "vote_count": {
+                "type": "integer",
+                "description": "Total number of votes (upvotes - downvotes)"
+              }
+            }
+          }
+        ]
+      },
+      "VoteCreate": {
+        "type": "object",
+        "required": [
+          "feature_id",
+          "vote_type"
+        ],
+        "properties": {
+          "feature_id": {
+            "type": "integer",
+            "description": "ID of the feature to vote on"
+          },
+          "vote_type": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down"
+            ],
+            "description": "Type of vote"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token is missing or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Invalid credentials"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/users/register": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Register a new user",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User created successfully"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Login user",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get current user information",
+        "responses": {
+          "200": {
+            "description": "Current user information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/features": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Get all features",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "List of features",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FeatureResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Create a new feature request",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Feature created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/features/{feature_id}": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Get feature by ID",
+        "security": [],
+        "parameters": [
+          {
+            "name": "feature_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feature details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Feature not found"
+          }
+        }
+      }
+    },
+    "/api/votes": {
+      "post": {
+        "tags": [
+          "Votes"
+        ],
+        "summary": "Vote on a feature",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Vote recorded successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/api/votes/features/{feature_id}/count": {
+      "get": {
+        "tags": [
+          "Votes"
+        ],
+        "summary": "Get vote count for a feature",
+        "security": [],
+        "parameters": [
+          {
+            "name": "feature_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vote count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

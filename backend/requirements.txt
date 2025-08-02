@@ -7,3 +7,4 @@ SQLAlchemy==2.0.19
 bcrypt==4.0.1
 python-jose==3.3.0
 email-validator==2.0.0.post2
+flask-swagger-ui==4.11.1

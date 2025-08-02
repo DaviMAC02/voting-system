@@ -15,3 +15,6 @@
 
 [2025-08-02]
 "create a gitignore file containing the most common files to ignore in both flask and vite projects"
+
+[2025-08-02]
+"Create a complete documentation for the backend using swagger following openAPI standards."
