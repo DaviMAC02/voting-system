@@ -1,0 +1,65 @@
+Feature Voting System - 2-Hour MVP Requirements
+
+Tech Stack:
+- Frontend: React with TypeScript - Vite
+- Backend: Python Flask
+- Database: SQLite (for quick setup)
+
+1. Core User Features (45 minutes)
+   - Simple email-based authentication
+   - Basic user profile (email, name)
+   - Homepage listing all feature requests
+
+2. Feature Request Management (30 minutes)
+   - Create new feature requests
+     * Title (required)
+     * Description (required)
+     * Category (dropdown: Bug, Feature, Enhancement)
+   - List view of all feature requests
+     * Sort by newest first
+     * Basic status indicator (Open/Closed)
+
+3. Voting System (30 minutes)
+   - Upvote/downvote buttons on each feature
+   - Vote count display
+   - One vote per user per feature
+   - Simple vote toggle (can undo vote)
+
+4. Basic UI/UX (15 minutes)
+   - Responsive layout using TailwindCSS
+   - Navigation bar
+   - Feature request cards
+   - Simple form for submissions
+
+Database Schema:
+```
+users
+  - id
+  - email
+  - name
+  - createdAt
+
+features
+  - id
+  - title
+  - description
+  - category
+  - status
+  - createdAt
+  - userId
+
+votes
+  - id
+  - featureId
+  - userId
+  - type (up/down)
+  - createdAt
+```
+
+Out of scope for 2-hour MVP:
+- Comments
+- Advanced filtering
+- Admin dashboard
+- Email notifications
+- File attachments
+- Analytics

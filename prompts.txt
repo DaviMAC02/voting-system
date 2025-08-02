@@ -1,0 +1,17 @@
+[2025-08-02]
+"For each prompt I give you, write to a file prompts.txt, so I can audit the work."
+
+[2025-08-02]
+"Given project headline, create a features.txt file with a suggestion on relevant functional requirements"
+
+[2025-08-02]
+"Revisit these requirements and make it coherent for a 2 hour coding session (full stack)"
+
+[2025-08-02]
+"You are a senior full stack engineer specialist in Flask and React with vite. Scaffold the backend structure of the project described in features.txt. Place it into a folder called backend in order to separate back and front. Use modular monolith principles, each module containing its own service, controller and repository layer. Make use of Pydantic for input validation as well as the use of interfaces for dependency injection."
+
+[2025-08-02]
+"Create a scripts file and create these relevant scripts: - Startup script - dev and prod mode - Migration script. (if db.sql does not exists create it inside a folder called database)"
+
+[2025-08-02]
+"create a gitignore file containing the most common files to ignore in both flask and vite projects"
