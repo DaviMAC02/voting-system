@@ -12,3 +12,7 @@ class FeatureRepository(Repository):
     @abstractmethod
     def get_features_with_vote_count(self) -> List[tuple[Feature, int]]:
         pass
+
+    @abstractmethod
+    def get_by_title(self, title: str) -> Optional[Feature]:
+        pass

@@ -1,3 +1,8 @@
-from sqlalchemy.ext.declarative import declarative_base
+from app.shared.database import db
 
-Base = declarative_base()
+
+class Base(db.Model):
+    __abstract__ = True
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} {self.id}>"

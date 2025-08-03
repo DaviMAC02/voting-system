@@ -19,3 +19,6 @@ class Feature(Base):
     # Relationships
     user = relationship("User", backref="features")
     votes = relationship("Vote", backref="feature", cascade="all, delete-orphan")
+
+    # Dynamic properties
+    like_count: int = 0  # Will be set by the service

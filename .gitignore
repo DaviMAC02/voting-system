@@ -1,4 +1,4 @@
-# Python / Flask
+# Backend (Python/Flask)
 __pycache__/
 *.py[cod]
 *$py.class
@@ -7,11 +7,9 @@ __pycache__/
 env/
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -36,18 +34,47 @@ coverage.xml
 .pytest_cache/
 .python-version
 
-# Flask
-instance/
-.webassets-cache
+# Virtual Environment
 .env
 .venv
 venv/
 ENV/
 
-# SQLite
+# Database
 *.sqlite
 *.sqlite3
 *.db
+
+# Frontend (Node.js)
+node_modules
+dist
+dist-ssr
+*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # Node / Vite / React
 logs

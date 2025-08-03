@@ -1,22 +1,19 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from app.modules.users.models import User
-from app.modules.features.models import Feature
-from app.modules.votes.models import Vote
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
-engine = None
-db_session = None
-Base = declarative_base()
+db = SQLAlchemy()
+migrate = Migrate()
 
 
 def init_db(app):
-    global engine, db_session
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.init_app(app)
+    migrate.init_app(app, db)
 
-    engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
-    db_session = scoped_session(
-        sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    )
-    Base.query = db_session.query_property()
+    # Import models to ensure they're known to Flask-Migrate
+    from app.modules.users.models import User
+    from app.modules.features.models import Feature
+    from app.modules.votes.models import Vote
 
-    Base.metadata.create_all(bind=engine)
+    with app.app_context():
+        db.create_all()

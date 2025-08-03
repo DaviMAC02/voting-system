@@ -18,3 +18,15 @@
 
 [2025-08-02]
 "Create a complete documentation for the backend using swagger following openAPI standards."
+
+[2025-08-02]
+"Now let's move on to the frontend. Based on the features listed in features.txt and the backend we just built, scaffold a React application using Vite and Tailwind. To maintain design consistency, use the ShadCN library. Use pnpm"
+
+[2025-08-02]
+"Create feature list and voting components"
+
+[2025-08-02]
+"Create integration tests for all of the backend endpoints and also create a test script inside scripts to trigger all of them."
+
+[2025-08-02]
+"Create a comprehensive README.md file for the entire project. Explaining how to run both backend and frontend."

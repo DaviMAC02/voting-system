@@ -1,16 +1,9 @@
 from pydantic import BaseModel
 from datetime import datetime
-from enum import Enum
-
-
-class VoteType(str, Enum):
-    UP = "up"
-    DOWN = "down"
 
 
 class VoteCreate(BaseModel):
     feature_id: int
-    vote_type: VoteType
 
 
 class VoteResponse(VoteCreate):
@@ -19,4 +12,4 @@ class VoteResponse(VoteCreate):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

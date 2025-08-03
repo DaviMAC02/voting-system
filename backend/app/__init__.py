@@ -20,13 +20,22 @@ def create_app():
 
     # Configuration
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
+    app.config["APPLICATION_ROOT"] = "/"
+    app.url_map.strict_slashes = False
+    instance_path = os.path.join(os.path.dirname(__file__), "..", "database")
+    os.makedirs(instance_path, exist_ok=True)
+    db_path = os.path.join(instance_path, "db.sqlite")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-        "DATABASE_URL", "sqlite:///database/db.sqlite"
+        "DATABASE_URL", f"sqlite:///{db_path}"
     )
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "jwt-secret-key")
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False  # Tokens don't expire in development
+    app.config["JWT_ERROR_MESSAGE_KEY"] = (
+        "message"  # Use message instead of msg for errors
+    )
 
     # Initialize extensions
-    CORS(app)
+    # CORS(app)
     JWTManager(app)
     init_db(app)
 
@@ -42,21 +51,17 @@ def create_app():
         }
 
     # Swagger configuration
-    SWAGGER_URL = '/api/docs'
-    API_URL = '/swagger.json'
+    SWAGGER_URL = "/api/docs"
+    API_URL = "/swagger.json"
     swagger_bp = get_swaggerui_blueprint(
-        SWAGGER_URL,
-        API_URL,
-        config={
-            'app_name': "Feature Voting System API"
-        }
+        SWAGGER_URL, API_URL, config={"app_name": "Feature Voting System API"}
     )
 
     # Serve swagger.json
-    @app.route('/swagger.json')
+    @app.route("/swagger.json")
     def swagger():
         base_path = Path(__file__).parent.parent
-        return send_from_directory(base_path, 'swagger.json')
+        return send_from_directory(base_path, "swagger.json")
 
     # Register blueprints
     app.register_blueprint(swagger_bp, url_prefix=SWAGGER_URL)

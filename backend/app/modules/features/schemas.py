@@ -5,9 +5,9 @@ from enum import Enum
 
 
 class FeatureCategory(str, Enum):
-    BUG = "Bug"
-    FEATURE = "Feature"
-    ENHANCEMENT = "Enhancement"
+    BUG = "BUG"
+    FEATURE = "FEATURE"
+    ENHANCEMENT = "ENHANCEMENT"
 
 
 class FeatureStatus(str, Enum):
@@ -34,7 +34,7 @@ class FeatureResponse(FeatureBase):
     status: FeatureStatus
     created_at: datetime
     user_id: int
-    vote_count: int = 0
+    like_count: int = 0
 
     class Config:
-        orm_mode = True
+        from_attributes = True

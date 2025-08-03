@@ -12,3 +12,8 @@ class VoteRepository(Repository):
     @abstractmethod
     def get_vote_count_for_feature(self, feature_id: int) -> int:
         pass
+
+    @abstractmethod
+    def get_by_user(self, user_id: int) -> List[Vote]:
+        """Get all votes for a specific user"""
+        pass

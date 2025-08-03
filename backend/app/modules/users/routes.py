@@ -15,9 +15,9 @@ def register():
     try:
         user_data = UserCreate(**request.json)
         user = user_service.create_user(user_data)
-        return jsonify({"message": "User created successfully", "id": user.id}), 201
+        return jsonify({"message": "User registered successfully", "id": user.id}), 201
     except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"message": str(e)}), 400
     except Exception as e:
         return jsonify({"error": "Internal server error"}), 500
 
@@ -29,9 +29,9 @@ def login():
         user = user_service.authenticate_user(login_data.email, login_data.password)
 
         if not user:
-            return jsonify({"error": "Invalid credentials"}), 401
+            return jsonify({"message": "Invalid credentials"}), 401
 
-        access_token = create_access_token(identity=user.id)
+        access_token = create_access_token(identity=str(user.id))
         return jsonify({"access_token": access_token}), 200
     except Exception as e:
         return jsonify({"error": "Internal server error"}), 500
