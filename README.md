@@ -1,11 +1,15 @@
 # Feature Voting System
 
+[![CI](https://github.com/DaviMAC02/voting-system/actions/workflows/ci.yml/badge.svg)](https://github.com/DaviMAC02/voting-system/actions/workflows/ci.yml)
+
 A full-stack web application for collecting and voting on feature requests. Users can submit feature requests, vote on them, and track their status.
+
+Built as a timeboxed 2-hour full-stack exercise with an AI pair programmer. The backend is a Flask modular monolith (repository and service layers per module) and the frontend is React with Vite. The scoped requirements are in [docs/requirements.txt](docs/requirements.txt) and every prompt used is logged in [docs/ai-prompts.txt](docs/ai-prompts.txt).
 
 ## Project Structure
 
 ```
-feature-voting-system/
+voting-system/
 ├── backend/               # Flask backend
 │   ├── app/              # Application code
 │   ├── scripts/          # Utility scripts
@@ -30,7 +34,7 @@ feature-voting-system/
 
 - Python 3.10 or higher
 - Node.js 18 or higher
-- pnpm (for frontend package management)
+- pnpm 9 (for frontend package management)
 
 ## Backend Setup
 
@@ -71,7 +75,7 @@ feature-voting-system/
    ```bash
    ./scripts/start.sh
    ```
-   The API will be available at `http://localhost:3000`
+   The API will be available at `http://localhost:3333`
 
 ## Frontend Setup
 
@@ -114,7 +118,7 @@ feature-voting-system/
 Once the backend is running, you can access the Swagger documentation at:
 
 ```
-http://localhost:3000/api/docs
+http://localhost:3333/api/docs
 ```
 
 ## Technologies Used
@@ -174,4 +178,4 @@ cd backend
 
 ## License
 
-MIT License
+[MIT](LICENSE)
